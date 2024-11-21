@@ -1,7 +1,7 @@
 package io.valentinsoare.newsoutletapis.service;
 
 import io.valentinsoare.newsoutletapis.dto.AuthorDto;
-import io.valentinsoare.newsoutletapis.entity.Author;
+import io.valentinsoare.newsoutletapis.dto.PostDto;
 
 import java.util.List;
 
@@ -12,4 +12,10 @@ public interface AuthorService {
     AuthorDto getAuthorByLastName(String lastName);
     boolean existsByEmail(String email);
     List<AuthorDto> getAuthorsByIds(List<Long> userIds);
+    AuthorDto createAuthor(AuthorDto authorDto);
+    AuthorDto updateAuthor(AuthorDto authorDto);
+    List<PostDto> updateAuthorPostList(AuthorDto author, List<Long> postIds);
+    void deleteAuthor(Long id);
+    List<AuthorDto> getAllAuthors();
+    Long countAuthors();
 }

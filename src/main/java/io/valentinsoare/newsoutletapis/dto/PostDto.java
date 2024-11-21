@@ -40,4 +40,16 @@ public class PostDto {
     private Set<CommentDto> comments = Collections.emptySet();
 
     private Set<CategoryDto> categories = Collections.emptySet();
+
+    @Override
+    public String toString() {
+        return "PostDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author=" + author +
+                ", description='" + description + '\'' +
+                ", category=" + category +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

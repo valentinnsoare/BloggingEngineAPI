@@ -30,4 +30,14 @@ public class RegisterDto {
     private String password;
 
     private Set<String> roles = Collections.emptySet();
+
+    @Override
+    public String toString() {
+        return "RegisterDto{" +
+                "name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

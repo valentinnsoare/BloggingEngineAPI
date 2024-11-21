@@ -54,6 +54,11 @@ public class Author implements Comparable<Author> {
         return this;
     }
 
+    public Author setAllPosts(Set<Post> allPosts) {
+        this.allPosts = allPosts;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

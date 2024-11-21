@@ -27,4 +27,14 @@ public class AuthorDto {
     private String email;
 
     private Set<PostDto> postsFromAuthor = Collections.emptySet();
+
+    @Override
+    public String toString() {
+        return "AuthorDto{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

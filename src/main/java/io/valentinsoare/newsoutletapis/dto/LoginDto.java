@@ -14,4 +14,12 @@ public class LoginDto {
 
     @NotBlank(message = "Password cannot be blank")
     private String password;
+
+    @Override
+    public String toString() {
+        return "LoginDto{" +
+                "usernameOrEmail='" + usernameOrEmail + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

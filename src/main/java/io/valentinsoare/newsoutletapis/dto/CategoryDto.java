@@ -24,4 +24,13 @@ public class CategoryDto {
     private String description;
 
     private Set<PostDto> allPostsWithCategory = Collections.emptySet();
+
+    @Override
+    public String toString() {
+        return "CategoryDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

@@ -16,4 +16,12 @@ public class JWTAuthResponseDto {
 
     @NotBlank(message = "Token type is required")
     private String tokenType;
+
+    @Override
+    public String toString() {
+        return "JWTAuthResponseDto{" +
+                "accessToken='" + accessToken + '\'' +
+                ", tokenType='" + tokenType + '\'' +
+                '}';
+    }
 }

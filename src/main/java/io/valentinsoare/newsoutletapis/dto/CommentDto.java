@@ -29,4 +29,15 @@ public class CommentDto {
     private String body;
 
     private long postId;
+
+    @Override
+    public String toString() {
+        return "CommentDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", body='" + body + '\'' +
+                ", postId=" + postId +
+                '}';
+    }
 }
