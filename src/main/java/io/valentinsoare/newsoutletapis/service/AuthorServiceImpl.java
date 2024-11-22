@@ -219,9 +219,16 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public List<PostDto> updateAuthorPostList(AuthorDto author, List<Long> postIds) {
-        log.info("Updating author {} post list with post ids: {}.", author, postIds);
-        String searchedEmail = author.getEmail();
+    public List<PostDto> updateAuthorPostList(Long id, List<Long> postIds) {
+        log.info("Updating author with id {} post list with post ids: {}.", id, postIds);
+
+        Author searchedAuthor = authorRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Author with id {} not found.", id);
+                    throw new ResourceNotFoundException("author", Map.of("id", id.toString()));
+                });
+
+        String searchedEmail = searchedAuthor.getEmail();
 
         Author searchedAuthorByEmail = authorRepository.findByEmail(searchedEmail)
                 .orElseThrow(() -> {
@@ -231,26 +238,26 @@ public class AuthorServiceImpl implements AuthorService {
 
         Set<Post> listWithPosts = new HashSet<>();
 
-        for (Long id : postIds) {
+        for (Long i : postIds) {
             Post existentPost = postRepository.findById(id)
                     .orElseThrow(() -> {
-                        log.error("Post with id {} not found.", id);
-                        throw new ResourceNotFoundException("post", Map.of("id", id.toString()));
+                        log.error("Post with id {} not found.", i);
+                        throw new ResourceNotFoundException("post", Map.of("id", i.toString()));
                     });
 
-            log.info("Post with id {} found.", id);
+            log.info("Post with id {} found.", i);
             listWithPosts.add(existentPost);
         }
 
         searchedAuthorByEmail.setAllPosts(listWithPosts);
-        log.info("Author {} post list updated with post ids: {}.", author, postIds);
+        log.info("Author {} post list updated with post ids: {}.", searchedAuthor, postIds);
 
         try {
             authorRepository.save(searchedAuthorByEmail);
-            log.info("Author {} post list updated with post ids: {}.", author, postIds);
+            log.info("Author {} post list updated with post ids: {}.", searchedAuthor, postIds);
         } catch (Exception e) {
-            log.error("Error updating author {} post list with post ids: {}.", author, postIds);
-            throw new BloggingEngineException("author", "error updating post list", Map.of("author", author.toString()));
+            log.error("Error updating author {} post list with post ids: {}.", searchedAuthor, postIds);
+            throw new BloggingEngineException("author", "error updating post list", Map.of("author", searchedAuthor.toString()));
         }
 
         List<PostDto> authorAllPostsUpdates = new ArrayList<>();

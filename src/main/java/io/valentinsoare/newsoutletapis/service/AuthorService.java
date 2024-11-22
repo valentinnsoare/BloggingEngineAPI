@@ -16,7 +16,7 @@ public interface AuthorService {
     List<AuthorDto> getAuthorsByIds(List<Long> userIds);
     AuthorDto createAuthor(AuthorDto authorDto);
     AuthorDto updateAuthor(AuthorDto authorDto);
-    List<PostDto> updateAuthorPostList(AuthorDto author, List<Long> postIds);
+    List<PostDto> updateAuthorPostList(Long id, List<Long> postIds);
     void deleteAuthor(Long id);
     AuthorResponse getAllAuthors(int pageNo, int pageSize, @NotNull String sortBy, @NotNull String sortDir);
     Long countAuthors();
