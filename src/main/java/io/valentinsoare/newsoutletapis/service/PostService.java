@@ -1,7 +1,6 @@
 package io.valentinsoare.newsoutletapis.service;
 
 import io.valentinsoare.newsoutletapis.dto.PostDto;
-import io.valentinsoare.newsoutletapis.entity.Author;
 import io.valentinsoare.newsoutletapis.response.PostResponse;
 
 import java.util.List;

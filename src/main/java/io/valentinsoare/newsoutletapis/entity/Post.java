@@ -16,6 +16,14 @@ import java.util.*;
 @AllArgsConstructor
 @Entity(name = "post")
 @Table(name = "post", schema = "news_outlet_db")
+@NamedEntityGraph(
+        name = "post-with-authors-categories-comments",
+        attributeNodes = {
+                @NamedAttributeNode("categories"),
+                @NamedAttributeNode("authors"),
+                @NamedAttributeNode("comments")
+        }
+)
 public class Post implements Comparable<Post> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +32,6 @@ public class Post implements Comparable<Post> {
 
     @Column(name = "title", nullable = false, unique = true)
     private String title;
-
-    @ManyToOne
-    @NotNull(message = "Author is mandatory!")
-    @JoinColumn(name = "author_id", nullable = false)
-    private Author author;
 
     @Column(name = "description", nullable = false)
     private String description;
@@ -68,11 +71,6 @@ public class Post implements Comparable<Post> {
         return this;
     }
 
-    public Post setAuthor(@Size(max = 50) @NotBlank(message = "Author is mandatory!") Author author) {
-        this.author = author;
-        return this;
-    }
-
     public Post setDescription(@Size(max = 255) @NotBlank(message = "Description is mandatory!") String description) {
         this.description = description;
         return this;
@@ -80,6 +78,11 @@ public class Post implements Comparable<Post> {
 
     public Post setContent(@Size(max = 15000) @NotBlank(message = "Content is mandatory!") String content) {
         this.content = content;
+        return this;
+    }
+
+    public Post setAuthors(Set<Author> authors) {
+        this.authors = authors;
         return this;
     }
 
@@ -125,7 +128,7 @@ public class Post implements Comparable<Post> {
     @Override
     public int compareTo(@NonNull Post o) {
         return Comparator.comparing((Post p) -> p.title)
-                .thenComparing(p -> author)
+                .thenComparing(p -> o.getAuthors().removeAll(authors) ? 0 : 1)
                 .thenComparing(p -> description)
                 .compare(this, o);
     }

@@ -117,7 +117,7 @@ public class PostServiceImpl implements PostService {
     public List<PostDto> getPostsByAuthorEmail(@NotNull String email) {
         log.info("Getting all posts by author: {}", email);
 
-        return postRepository.getAllByAuthor_Email(email).stream()
+        return postRepository.getAllByAuthorEmail(email).stream()
                 .map(this::mapToDTO)
                 .toList();
     }
@@ -133,7 +133,7 @@ public class PostServiceImpl implements PostService {
                 );
 
         post.setTitle(auxiliaryMethods.updateIfPresent(postDto.getTitle(), post.getTitle()))
-                .setAuthor((Author) auxiliaryMethods.updateIfPresent(postDto.getAuthor(), post.getAuthor()))
+                .setAuthors((Set<Author>) auxiliaryMethods.updateIfPresent(postDto.getAuthor(), post.getAuthors()))
                 .setDescription(auxiliaryMethods.updateIfPresent(postDto.getDescription(), post.getDescription()))
                 .setContent(auxiliaryMethods.updateIfPresent(postDto.getContent(), post.getContent()));
 
@@ -219,7 +219,7 @@ public class PostServiceImpl implements PostService {
     public List<PostDto> getPostsByAuthorLastName(@NotNull String lastName) {
         log.info("Fetching all posts by author with last name: {}.", lastName);
 
-        List<PostDto> fetchedPosts = postRepository.getAllByAuthor_LastName(lastName).stream()
+        List<PostDto> fetchedPosts = postRepository.getAllByAuthorLastName(lastName).stream()
                 .map(this::mapToDTO)
                 .toList();
 
