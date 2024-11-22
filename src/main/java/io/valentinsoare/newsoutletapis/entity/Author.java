@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -16,6 +17,10 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity(name = "author")
 @Table(name = "author", schema = "news_outlet_db")
+@NamedEntityGraph(
+        name = "author-with-posts",
+        attributeNodes = @NamedAttributeNode("allPosts")
+)
 public class Author implements Comparable<Author> {
     @Id
     @Column(name = "id", nullable = false)

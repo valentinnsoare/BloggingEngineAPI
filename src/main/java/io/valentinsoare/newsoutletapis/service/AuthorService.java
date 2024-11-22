@@ -2,6 +2,8 @@ package io.valentinsoare.newsoutletapis.service;
 
 import io.valentinsoare.newsoutletapis.dto.AuthorDto;
 import io.valentinsoare.newsoutletapis.dto.PostDto;
+import io.valentinsoare.newsoutletapis.response.AuthorResponse;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -16,6 +18,6 @@ public interface AuthorService {
     AuthorDto updateAuthor(AuthorDto authorDto);
     List<PostDto> updateAuthorPostList(AuthorDto author, List<Long> postIds);
     void deleteAuthor(Long id);
-    List<AuthorDto> getAllAuthors();
+    AuthorResponse getAllAuthors(int pageNo, int pageSize, @NotNull String sortBy, @NotNull String sortDir);
     Long countAuthors();
 }

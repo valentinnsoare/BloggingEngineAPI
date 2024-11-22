@@ -14,6 +14,10 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity(name = "category")
 @Table(name = "category", schema = "news_outlet_db")
+@NamedEntityGraph(
+        name = "category-with-posts",
+        attributeNodes = @NamedAttributeNode("posts")
+)
 public class Category implements Comparable<Category> {
     @Id
     @Column(name = "id", nullable = false)

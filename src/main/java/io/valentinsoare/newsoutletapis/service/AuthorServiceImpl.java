@@ -5,12 +5,17 @@ import io.valentinsoare.newsoutletapis.dto.PostDto;
 import io.valentinsoare.newsoutletapis.entity.Author;
 import io.valentinsoare.newsoutletapis.entity.Post;
 import io.valentinsoare.newsoutletapis.exception.BloggingEngineException;
+import io.valentinsoare.newsoutletapis.exception.NoElementsException;
 import io.valentinsoare.newsoutletapis.exception.ResourceNotFoundException;
 import io.valentinsoare.newsoutletapis.repository.AuthorRepository;
 import io.valentinsoare.newsoutletapis.repository.PostRepository;
+import io.valentinsoare.newsoutletapis.response.AuthorResponse;
 import io.valentinsoare.newsoutletapis.utilities.AuxiliaryMethods;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +37,14 @@ public class AuthorServiceImpl implements AuthorService {
         this.modelMapper = modelMapper;
         this.auxiliaryMethods = auxiliaryMethods;
         this.postRepository = postRepository;
+    }
+
+    private AuthorDto mapToDTO(Author author) {
+        return modelMapper.map(author, AuthorDto.class);
+    }
+
+    private Author mapToEntity(AuthorDto authorDto) {
+        return modelMapper.map(authorDto, Author.class);
     }
 
     @Override
@@ -175,6 +188,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Transactional
     public AuthorDto updateAuthor(AuthorDto authorDto) {
         log.info("Updating author {}.", authorDto);
 
@@ -250,17 +264,64 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Transactional
     public void deleteAuthor(Long id) {
+        log.info("Deleting author with id: {}.", id);
 
+        Author author = authorRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Author with id {} not found.", id);
+                    throw new ResourceNotFoundException("author", Map.of("id", id.toString()));
+                });
+
+        try {
+            log.info("Deleting author with id {}.", id);
+            authorRepository.delete(author);
+        } catch (Exception e) {
+            log.error("Error deleting author with id {}.", id);
+            throw new BloggingEngineException("author", "error deleting", Map.of("id", id.toString()));
+        }
     }
 
     @Override
-    public List<AuthorDto> getAllAuthors() {
-        return List.of();
+    @Transactional
+    public AuthorResponse getAllAuthors(int pageNo, int pageSize, @NotNull String sortBy, @NotNull String sortDir) {
+        log.info("Fetching all authors with page number: {}, page size: {}, sort by: {}, sort direction: {}.",
+                pageNo, pageSize, sortBy, sortDir);
+
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        log.info("Fetching all authors for one page with page characteristics: {}.", pageCharacteristics);
+        Page<Author> pageWithAuthors =authorRepository.findAll(pageCharacteristics);
+
+        List<AuthorDto> content = pageWithAuthors.getContent().stream()
+                .map(this::mapToDTO)
+                .toList();
+
+        if (content.isEmpty()) {
+            throw new NoElementsException("authors for page number: %s with max %s authors per page".formatted(pageNo, pageSize));
+        }
+
+        return AuthorResponse.builder()
+                .pageContent(content)
+                .pageNo(pageCharacteristics.getPageNumber())
+                .pageSize(pageCharacteristics.getPageSize())
+                .totalAuthorsOnPage(content.size())
+                .totalPages(pageWithAuthors.getTotalPages())
+                .isLast(pageWithAuthors.isLast())
+                .build();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long countAuthors() {
-        return 0L;
+        log.info("Counting all authors.");
+        long countingAuthors = authorRepository.count();
+
+        if (countingAuthors <= 0) {
+            throw new NoElementsException("authors");
+        }
+
+        return countingAuthors;
     }
 }
