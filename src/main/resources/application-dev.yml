@@ -1,4 +1,6 @@
 spring:
+  main:
+    banner-mode: "log"
   application:
     name: BloggingEngineAPI
 
@@ -22,13 +24,7 @@ spring:
       mode: always
 
 logging:
-  level:
-    org.springframework: INFO
-    org.hibernate: INFO
-    org.hibernate.SQL: WARN
-    org.hibernate.orm.jdbc.bind: WARN
-    io.valentinsoare.learnspringmodulithmonolithtomicroservicesseamlessly: INFO
-    com.zaxxer.hikari: WARN
+  config: classpath:logback-spring.xml
 
 server:
   port: 8080
