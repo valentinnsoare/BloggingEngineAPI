@@ -31,11 +31,10 @@ public class AuthorServiceImpl implements AuthorService {
 
     public AuthorServiceImpl(AuthorRepository authorRepository,
                              ModelMapper modelMapper,
-                             AuxiliaryMethods auxiliaryMethods,
                              PostRepository postRepository) {
         this.authorRepository = authorRepository;
         this.modelMapper = modelMapper;
-        this.auxiliaryMethods = auxiliaryMethods;
+        this.auxiliaryMethods = AuxiliaryMethods.getInstance();
         this.postRepository = postRepository;
     }
 
@@ -229,7 +228,6 @@ public class AuthorServiceImpl implements AuthorService {
                 });
 
         String searchedEmail = searchedAuthor.getEmail();
-
         Author searchedAuthorByEmail = authorRepository.findByEmail(searchedEmail)
                 .orElseThrow(() -> {
                     log.error("Author with email {} not found.", searchedEmail);
@@ -237,7 +235,6 @@ public class AuthorServiceImpl implements AuthorService {
                 });
 
         Set<Post> listWithPosts = new HashSet<>();
-
         for (Long i : postIds) {
             Post existentPost = postRepository.findById(id)
                     .orElseThrow(() -> {

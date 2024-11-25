@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -28,7 +27,7 @@ public class RegisterDto {
     @NotBlank(message = "Password is mandatory!")
     private String password;
 
-    private Set<String> roles = Collections.emptySet();
+    private Set<String> roles = new HashSet<>();
 
     @Override
     public String toString() {

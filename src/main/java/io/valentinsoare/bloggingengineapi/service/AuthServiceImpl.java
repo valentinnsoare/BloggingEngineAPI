@@ -8,6 +8,7 @@ import io.valentinsoare.bloggingengineapi.exception.BloggingEngineException;
 import io.valentinsoare.bloggingengineapi.repository.RoleRepository;
 import io.valentinsoare.bloggingengineapi.repository.UserRepository;
 import io.valentinsoare.bloggingengineapi.security.JwtTokenProvider;
+import io.valentinsoare.bloggingengineapi.utilities.AuxiliaryMethods;
 import io.valentinsoare.bloggingengineapi.utilities.EncodedPasswordGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +28,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private AuxiliaryMethods auxiliaryMethods;
 
 
     public AuthServiceImpl(AuthenticationManager authenticationManager,
@@ -37,6 +39,7 @@ public class AuthServiceImpl implements AuthService {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.auxiliaryMethods = AuxiliaryMethods.getInstance();
     }
 
     @Override
@@ -81,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         for (String i : registerDto.getRoles()) {
-            Role role = roleRepository.findByName(i).orElseThrow(() ->
+            Role role = roleRepository.findByName("ROLE_" + i).orElseThrow(() ->
                 BloggingEngineException.builder()
                         .resourceName("register user")
                         .message("Role not found!")

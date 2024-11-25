@@ -27,11 +27,10 @@ public class CategoryServiceImpl implements CategoryService {
     private final AuxiliaryMethods auxiliaryMethods;
 
     public CategoryServiceImpl(CategoryRepository categoryRepository,
-                               ModelMapper modelMapper,
-                               AuxiliaryMethods auxiliaryMethods) {
+                               ModelMapper modelMapper) {
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
-        this.auxiliaryMethods = auxiliaryMethods;
+        this.auxiliaryMethods = AuxiliaryMethods.getInstance();
     }
 
     private CategoryDto mapToDTO(Category category) {
