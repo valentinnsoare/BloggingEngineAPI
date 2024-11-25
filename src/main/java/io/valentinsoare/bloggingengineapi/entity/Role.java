@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,6 +24,17 @@ public class Role implements Comparable<Role> {
     @Column(name = "name", nullable = false, unique = true)
     @NotBlank(message = "Role name is mandatory and should be unique.")
     private String name;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
+
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -43,5 +56,13 @@ public class Role implements Comparable<Role> {
     public int compareTo(Role o) {
         if (o == null) return -2;
         return this.name.compareTo(o.name);
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

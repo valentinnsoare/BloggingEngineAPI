@@ -27,11 +27,10 @@ public class PostServiceImpl implements PostService {
     private final ModelMapper modelmapper;
 
     public PostServiceImpl(PostRepository postRepository,
-                           ModelMapper modelMapper,
-                           AuxiliaryMethods auxiliaryMethods) {
+                           ModelMapper modelMapper) {
         this.modelmapper = modelMapper;
         this.postRepository = postRepository;
-        this.auxiliaryMethods = auxiliaryMethods;
+        this.auxiliaryMethods = AuxiliaryMethods.getInstance();
     }
 
     private PostDto mapToDTO(Post post) {

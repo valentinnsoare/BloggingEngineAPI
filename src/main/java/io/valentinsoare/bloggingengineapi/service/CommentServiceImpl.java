@@ -30,11 +30,10 @@ public class CommentServiceImpl implements CommentService {
 
     public CommentServiceImpl(CommentRepository commentRepository,
                               PostRepository postRepository,
-                              ModelMapper modelMapper,
-                              AuxiliaryMethods auxiliaryMethodsComment) {
+                              ModelMapper modelMapper) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
-        this.auxiliaryMethodsComment = auxiliaryMethodsComment;
+        this.auxiliaryMethodsComment = AuxiliaryMethods.getInstance();
         this.modelMapper = modelMapper;
     }
 

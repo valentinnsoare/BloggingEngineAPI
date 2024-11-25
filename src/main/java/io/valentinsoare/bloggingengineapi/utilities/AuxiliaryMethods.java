@@ -1,14 +1,19 @@
 package io.valentinsoare.bloggingengineapi.utilities;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
-@Service
-@NoArgsConstructor
+
 public class AuxiliaryMethods {
+    private final ObjectMapper jsonStyle;
     private static AuxiliaryMethods instance;
+
+    private AuxiliaryMethods() {
+        this.jsonStyle = new ObjectMapper();
+        this.jsonStyle.registerModule(new JavaTimeModule());
+    }
 
     public static AuxiliaryMethods getInstance() {
         if (instance == null) {
@@ -36,5 +41,9 @@ public class AuxiliaryMethods {
         }
 
         return newValue != null ? newValue : currentValue;
+    }
+
+    public ObjectMapper getJsonStyle() {
+        return jsonStyle;
     }
 }

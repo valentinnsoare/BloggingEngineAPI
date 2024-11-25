@@ -49,6 +49,12 @@ public class User implements Comparable<User> {
 
     public void addRole(Role role) {
         roles.add(role);
+        role.addUser(this);
+    }
+
+    public void removeRole(Role role) {
+        roles.remove(role);
+        role.removeUser(this);
     }
 
     @Override
